@@ -1,0 +1,10 @@
+.editDiv {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+
+    button:not(:last-of-type) {
+        margin-right: 10px;
+    }
+
+}

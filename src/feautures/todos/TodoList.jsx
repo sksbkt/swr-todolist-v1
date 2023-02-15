@@ -7,16 +7,18 @@ import useSWR from 'swr';
 
 import {
     getTodos,
-    // addTodo,
+    addTodo,
     updateTodo,
     deleteTodo,
     todosUrlEndpoint as cacheKey
 } from '../../api/todosApi';
 
 import {
-    addMutation as addTodo,
-    addTodoOptions
-} from '../../helpers/todosMutation'
+    // addMutation as addTodo,
+    addTodoOptions,
+    updateTodoOptions,
+} from '../../api/todosMutationOptions'
+import Todo from "../../component/todo";
 
 function TodoList() {
     const [newTodo, setNewTodo] = useState('');
@@ -36,7 +38,7 @@ function TodoList() {
     async function addTodoMutation(newTodo) {
         try {
             await mutate(
-                addTodo(newTodo, todos),
+                addTodo(newTodo),
                 addTodoOptions(newTodo)
             )
             toast.success("Success! Added new item", {
@@ -44,6 +46,7 @@ function TodoList() {
                 icon: '🎉'
             })
         } catch (error) {
+            console.log(error);
             toast.error('Failed to add the new item', {
                 duration: 1000
             });
@@ -53,8 +56,10 @@ function TodoList() {
     async function updateTodoMutation(updatedTodo) {
 
         try {
-            await updateTodo(updatedTodo);
-            mutate();
+            mutate(
+                updateTodo(updatedTodo),
+                updateTodoOptions(updatedTodo)
+            );
             toast.success("Success! updated item", {
                 duration: 1000,
                 icon: '🚀'
@@ -111,24 +116,41 @@ function TodoList() {
         content = <p>{error.message}</p>
     } else {
         content = todos.map((todo) => {
-            return (<article key={todo.id}>
-                <div className="todo">
-                    <input
-                        type="checkbox"
-                        checked={todo.completed}
-                        id={todo.id}
-                        onChange={() => {
-                            updateTodoMutation(
-                                { ...todo, completed: !todo.completed }
-                            )
-                        }}
-                    />
-                    <label htmlFor={todo.id}>{todo.title}</label>
-                </div>
-                <button className="trash" onClick={() => deleteTodoMutation({ id: todo.id })}>
-                    <FontAwesomeIcon icon={faTrash} />
-                </button>
-            </article>)
+            return (
+                <Todo
+                    todo={todo}
+                    key={todo.id}
+                    onDelete={(id) => deleteTodoMutation({ id: id })}
+                    onUpdate={(updatedTodo) => updateTodoMutation(updatedTodo)}
+                />
+                // <article key={todo.id}>
+                //     <div className="todo">
+                //         <input
+                //             type="checkbox"
+                //             checked={todo.completed}
+                //             id={todo.id}
+                //             onChange={() => {
+                //                 updateTodoMutation(
+                //                     { ...todo, completed: !todo.completed }
+                //                 )
+                //             }}
+                //         />
+                //         <input type="text"
+                //             value={todo.title}
+                //             id={todo.id}
+                //             onChange={(e) => {
+                //                 updateTodoMutation(
+                //                     { ...todo, title: e.target.value }
+                //                 )
+                //             }}
+                //         />
+                //         {/* <label htmlFor={todo.id}>{todo.title}</label> */}
+                //     </div>
+                //     <button className="trash" onClick={() => deleteTodoMutation({ id: todo.id })}>
+                //         <FontAwesomeIcon icon={faTrash} />
+                //     </button>
+                // </article>
+            )
         });
     }
     return (<main>
