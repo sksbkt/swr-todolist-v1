@@ -1,11 +1,6 @@
 import { addTodo, updateTodo, deleteTodo } from "./todosApi";
 
 
-
-
-
-
-
 // export async function addMutation(newTodo, todos) {
 //     const added = await addTodo(newTodo);
 //     return [...todos, added].sort((a, b) => b.id - a.id);

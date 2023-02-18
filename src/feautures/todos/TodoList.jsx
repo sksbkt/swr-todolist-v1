@@ -19,6 +19,8 @@ import {
     updateTodoOptions,
 } from '../../api/todosMutationOptions'
 import Todo from "../../component/todo";
+import Skeleton from "../../component/skeleton/skeleton";
+import SkeletonTodo from "../../component/skeleton/SkeletonTodo";
 
 function TodoList() {
     const [newTodo, setNewTodo] = useState('');
@@ -111,7 +113,9 @@ function TodoList() {
     );
     let content;
     if (isLoading) {
-        content = <p>Loading...</p>
+        // content = <p>Loading...</p>
+        content = <SkeletonTodo />
+
     } else if (error) {
         content = <p>{error.message}</p>
     } else {

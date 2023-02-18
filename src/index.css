@@ -31,6 +31,7 @@ form, article {
   align-items: center;
   background-color: #F8FAFC;
   border: 1px solid #18181B;
+  margin-top: 10px;
 }
 
 .todo {
