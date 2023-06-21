@@ -18,10 +18,8 @@ import {
     addTodoOptions,
     updateTodoOptions,
 } from '../../api/todosMutationOptions'
-import Todo from "../../component/todo";
-import Skeleton from "../../component/skeleton/skeleton";
-import SkeletonTodo from "../../component/skeleton/SkeletonTodo";
-
+import Todo from '../../component/Todo';
+import SkeletonTodo from '../../component/skeleton/SkeletonTodo'
 function TodoList() {
     const [newTodo, setNewTodo] = useState('');
 
@@ -33,7 +31,10 @@ function TodoList() {
     } = useSWR(cacheKey, getTodos, {
         onSuccess: data => data.sort(
             //? we sort like this so the most recent todo goes on top of the list
-            (a, b) => b.id - a.id)
+            (a, b) => b.id - a.id),
+        revalidateOnFocus: false,
+        dedupingInterval: 2000,
+        suspense: true,
     });
 
 
@@ -97,7 +98,7 @@ function TodoList() {
 
     const newItemSection = (
         <form onSubmit={handleSubmit}>
-            <label htmlFor="new-dtodo">
+            <label htmlFor="new-todo">
             </label>
             <div className="new-todo">
                 <input type="text" id="new-todo" onChange={(e) => setNewTodo(e.target
@@ -127,33 +128,7 @@ function TodoList() {
                     onDelete={(id) => deleteTodoMutation({ id: id })}
                     onUpdate={(updatedTodo) => updateTodoMutation(updatedTodo)}
                 />
-                // <article key={todo.id}>
-                //     <div className="todo">
-                //         <input
-                //             type="checkbox"
-                //             checked={todo.completed}
-                //             id={todo.id}
-                //             onChange={() => {
-                //                 updateTodoMutation(
-                //                     { ...todo, completed: !todo.completed }
-                //                 )
-                //             }}
-                //         />
-                //         <input type="text"
-                //             value={todo.title}
-                //             id={todo.id}
-                //             onChange={(e) => {
-                //                 updateTodoMutation(
-                //                     { ...todo, title: e.target.value }
-                //                 )
-                //             }}
-                //         />
-                //         {/* <label htmlFor={todo.id}>{todo.title}</label> */}
-                //     </div>
-                //     <button className="trash" onClick={() => deleteTodoMutation({ id: todo.id })}>
-                //         <FontAwesomeIcon icon={faTrash} />
-                //     </button>
-                // </article>
+
             )
         });
     }

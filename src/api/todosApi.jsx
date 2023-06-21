@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const todosApi = axios.create({ baseURL: 'http://localhost:3500' });
+const todosApi = axios.create({ baseURL: import.meta.env.VITE_BASE_URL });
 
 //? simulates a delay: MORE INFO ON SWR DOC
 async function delay() {
